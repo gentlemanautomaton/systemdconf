@@ -39,10 +39,10 @@ func Example() {
 	// Output:
 	// [Unit]
 	// Description=Test Unit
+	// Wants=network-pre.target
+	// Before=network-pre.target
 	// ConditionPathExists=/usr/lib/test
 	// ConditionPathExists=/etc/test/env1.conf
-	// Before=network-pre.target
-	// Wants=network-pre.target
 	//
 	// [Service]
 	// Type=oneshot
