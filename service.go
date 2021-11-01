@@ -39,6 +39,7 @@ type Service struct {
 	NonBlocking              unitvalue.Bool
 
 	// Kill Options
+
 	KillMode          string
 	KillSignal        string
 	RestartKillSignal string
@@ -53,6 +54,26 @@ type Service struct {
 	EnvironmentFiles []string
 	PassEnvironment  []string
 	UnsetEnvironment []string
+
+	// Execution Options
+
+	WorkingDirectory string
+	RootDirectory    string
+
+	// Sandboxing
+
+	ProtectSystem              unitvalue.SystemProtection
+	ProtectHome                unitvalue.HomeProtection
+	RuntimeDirectories         []string
+	StateDirectories           []string
+	CacheDirectories           []string
+	LogDirectories             []string
+	ConfigurationDirectories   []string
+	RuntimeDirectoryMode       unitvalue.FileMode
+	StateDirectoryMode         unitvalue.FileMode
+	CacheDirectoryMode         unitvalue.FileMode
+	LogDirectoryMode           unitvalue.FileMode
+	ConfigurationDirectoryMode unitvalue.FileMode
 }
 
 // SectionName returns "Service" as the name of the configuration section.
@@ -121,6 +142,24 @@ func (s Service) Directives() Directives {
 	out.AddMany("EnvironmentFile", s.EnvironmentFiles)
 	out.AddMany("PassEnvironment", s.PassEnvironment)
 	out.AddMany("UnsetEnvironment", s.UnsetEnvironment)
+
+	// Execution Options
+	out.AddOptional("WorkingDirectory", s.WorkingDirectory)
+	out.AddOptional("RootDirectory", s.RootDirectory)
+
+	// Sandboxing Options
+	out.AddOptional("ProtectSystem", s.ProtectSystem.Value())
+	out.AddOptional("ProtectHome", s.ProtectHome.Value())
+	out.AddMany("RuntimeDirectory", s.RuntimeDirectories)
+	out.AddMany("StateDirectory", s.StateDirectories)
+	out.AddMany("CacheDirectory", s.CacheDirectories)
+	out.AddMany("LogsDirectory", s.LogDirectories)
+	out.AddMany("ConfigurationDirectory", s.ConfigurationDirectories)
+	out.AddOptional("RuntimeDirectoryMode", s.RuntimeDirectoryMode.Value())
+	out.AddOptional("StateDirectoryMode", s.StateDirectoryMode.Value())
+	out.AddOptional("CacheDirectoryMode", s.CacheDirectoryMode.Value())
+	out.AddOptional("LogsDirectoryMode", s.LogDirectoryMode.Value())
+	out.AddOptional("ConfigurationDirectoryMode", s.ConfigurationDirectoryMode.Value())
 
 	return out
 }
